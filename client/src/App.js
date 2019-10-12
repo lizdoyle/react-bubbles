@@ -22,6 +22,7 @@ const App = () => {
       <div className="App">
         <Route exact path="/" component={Login}/>
         <PrivateRoute 
+        exact
         path="/colors" 
         component={BubblePage} 
         render={props => (

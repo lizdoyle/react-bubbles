@@ -11,6 +11,7 @@ const ColorList = ({ colors, updateColors }) => {
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
 
+
   const editColor = color => {
     setEditing(true);
     setColorToEdit(color);
@@ -18,7 +19,15 @@ const ColorList = ({ colors, updateColors }) => {
 
   const saveEdit = e => {
     e.preventDefault();
-    axiosWithAuth.put(" ")
+    axiosWithAuth.put("http://localhost:5000/colors")
+        .then(res => {
+          this.setEditing({putSuccessMessage: res.data.successMessage, 
+                    putError: err.res.data.Error})
+
+        })
+        .catch(err => {this.setEditing({putSuccessMessage: "", 
+      putError: err.res.data.Error})
+    })
     // Make a put request to save your updated color
     // think about where will you get the id from...
     // where is is saved right now?
@@ -27,6 +36,15 @@ const ColorList = ({ colors, updateColors }) => {
 
   const deleteColor = color => {
     // make a delete request to delete this color
+    axiosWithAuth.delete("http://localhost:5000/colors")
+    .then(res => {
+      this.setEditing({putSuccessMessage: "", 
+                putError: err.res.data.Error})
+
+    })
+    .catch(err => {this.setEditing({putSuccessMessage: res.data.successMessage, 
+  putError: err.res.data.Error})
+})
   };
 
   return (

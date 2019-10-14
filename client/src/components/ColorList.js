@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import {axiosWithAuth} from "../utils/axiosWithAuth";
 
 const initialColor = {
@@ -10,7 +10,8 @@ const ColorList = ({ colors, updateColors }) => {
   console.log(colors);
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
-
+  
+  useEffect(() => {
 
   const editColor = color => {
     setEditing(true);
@@ -20,12 +21,12 @@ const ColorList = ({ colors, updateColors }) => {
   const saveEdit = e => {
     e.preventDefault();
     axiosWithAuth.put("http://localhost:5000/colors")
-        .then(res => {
-          this.setEditing({putSuccessMessage: res.data.successMessage, 
+        .then((res) => {
+          this.setEditing({updateColor: res.data.color, 
                     putError: err.res.data.Error})
 
         })
-        .catch(err => {this.setEditing({putSuccessMessage: "", 
+        .catch((err) => {this.setEditing({putSuccessMessage: "", 
       putError: err.res.data.Error})
     })
     // Make a put request to save your updated color
@@ -37,15 +38,17 @@ const ColorList = ({ colors, updateColors }) => {
   const deleteColor = color => {
     // make a delete request to delete this color
     axiosWithAuth.delete("http://localhost:5000/colors")
-    .then(res => {
+    .then((res) => {
       this.setEditing({putSuccessMessage: "", 
                 putError: err.res.data.Error})
 
     })
-    .catch(err => {this.setEditing({putSuccessMessage: res.data.successMessage, 
+    .catch((err) => {this.setEditing({putSuccessMessage: res.data.successMessage, 
   putError: err.res.data.Error})
 })
   };
+
+}, [colors, ])
 
   return (
     <div className="colors-wrap">
